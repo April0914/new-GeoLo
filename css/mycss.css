@@ -4,3 +4,6 @@
 background: #ccc;
 border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -khtml-border-radius: 2px; 
 }
+
+.error{background-color: #FF6600;border:#AA4502 1px solid;padding: 5px 10px;color: #FFFFFF;border-radius:4px;}
+.success{background-color: #12CC1A;border:#0FA015 1px solid;padding: 5px 10px;color: #FFFFFF;border-radius:4px;}
