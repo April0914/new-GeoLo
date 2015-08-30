@@ -27,7 +27,7 @@
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
 		 <script src="https://maps.googleapis.com/maps/api/js"></script>
 		<script type="text/javascript" src="js/jquery.ui-1.8.15/jquery.ui.autocomplete.min.js"></script>
-		<script type="text/javascript" src="app.js"></script>
+		
 		<script type="text/javascript" src="js/demo.js"></script>
 		<script type="text/javascript" src="js/jquery.ui.map.min.js"></script>
 		<script type="text/javascript" src="js/jquery.ui.map.services.min.js"></script>
@@ -215,7 +215,53 @@
 </div><!-- /page -->
 
 <!-------------------------------------Feedback Page--------------------------------------------->
+<script>
+function sendContact() {
+	var valid;	
+	valid = validateContact();
+	if(valid) {
+		jQuery.ajax({
+		url: "email.php",
+		data:'userName='+$("#userName").val()+'&userEmail='+$("#userEmail").val()+'&subject='+$("#subject").val()+'&content='+$(content).val(),
+		type: "POST",
+		success:function(data){
+		$("#mail-status").html(data);
+		},
+		error:function (){}
+		});
+	}
+}
 
+function validateContact() {
+	var valid = true;	
+	$(".demoInputBox").css('background-color','');
+	$(".info").html('');
+	
+	if(!$("#userName").val()) {
+		$("#userName-info").html("required*");
+		$("#userName").css('background-color','#FFFFDF');
+		valid = false;
+	}
+	if(!$("#userEmail").val()) {
+		$("#userEmail-info").html("required*");
+		$("#userEmail").css('background-color','#FFFFDF');
+		valid = false;
+	}
+	if(!$("#userEmail").val().match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+		$("#userEmail-info").html("Invalid email");
+		$("#userEmail").css('background-color','#FFFFDF');
+		valid = false;
+	}
+	if(!$("#subject").val()) {
+		$("#subject-info").html("required*");
+		$("#subject").css('background-color','#FFFFDF');
+		valid = false;
+	}
+	
+	
+	return valid;
+}
+</script>
 <div data-role="page" id="send_feedback" class="ui-responsive-panel">
 
 	<div data-role="header" data-position="fixed">
@@ -225,15 +271,20 @@
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-	<div id="form-messages" class="success"></div>
-	<div id="success"></div>
-		<form  action="email.php"  method="POST" id="feedback_report" enctype="multipart/form-data">
+	<div id="frmContact">
+	<div id="mail-status"></div>
 		<input disabled="disabled" type="text" name="textinput-1" id="textinput-1" placeholder="Sending A Feedback" value="Send us a feedback">
-		<input type="text" name="name" id="name" placeholder="Name" value="" required>
-		<input type="text" name="subjects" id="subjects" placeholder="Subject, Please include your email" value="" required>
-		<textarea cols="40" rows="20" name="message" id="message" placeholder="Tell us what you think" required> </textarea>
-		<button type="submit" id="submit" class="ui-btn ui-btn-inline ui-btn ui-shadow ui-corner-all ui-icon-navigation ui-btn-icon-right">Send</button>
-		</form>
+		<span id="userName-info" class="info"></span>
+		<input type="text" name="userName" id="userName" placeholder="Name" class="demoInputBox" >
+		<span id="userEmail-info" class="info"></span>
+		<input type="text" name="userEmail" id="userEmail" placeholder="Email" class="demoInputBox" >
+		<span id="subject-info" class="info"></span>
+		<input type="text" name="subject" id="subject" placeholder="Subject" class="demoInputBox">
+		<span id="content-info" class="info"></span>
+		<textarea name="content" id="content" class="demoInputBox" cols="60" rows="6" ></textarea>
+		
+		<button name="submit" class="btnAction" onClick="sendContact();">Send</button>
+		</div>
 		
 		
 	</div><!-- /content -->
